@@ -13,7 +13,7 @@ You can then use the Snipping Tool or similar to grab the screen and print the p
 
 ## Further Development
 
-The initial application was thrown together in a weekend to entertain my children back in 2018, but there is considerable scope for development. There are a lot of [issues](https://github.com/Wycott/WordSearchGenerator/issues) ranging from minor to not-so-minor that new developers or hobbyists could use to cut their teeth on.
+The initial application was thrown together in a weekend to entertain my children back in 2018, but there is considerable scope for development. There are a lot of [issues](https://github.com/Wycott/WordSearchGenerator/issues) ranging from minor to not-so-minor that developers or hobbyists could use to cut their teeth on.
 
 Want to suggest a new feature, raise a bug or get involved? Click [here](https://github.com/Wycott/WordSearchGenerator/discussions).
 

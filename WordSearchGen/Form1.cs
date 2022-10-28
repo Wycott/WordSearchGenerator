@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 
 namespace WordSearchGen
 {
     public partial class Form1 : Form
     {
         private WordSearchParams parameters;
-        private int CurrentX;
-        private int CurrentY;
-        private Dictionary<OrientationType.Orientation, int> orientations = new Dictionary<OrientationType.Orientation, int>();
-        private Dictionary<OrientationType.Orientation, Point> coordinates = Util.GetOrientationCoordinates();
-        private Boolean squaresGenerated = false;
+        private int currentX;
+        private int currentY;
+        private readonly Dictionary<OrientationType.Orientation, int> orientations = new Dictionary<OrientationType.Orientation, int>();
+        private readonly Dictionary<OrientationType.Orientation, Point> coordinates = Util.GetOrientationCoordinates();
+        private bool squaresGenerated;
 
         private int MaxHeight { get; set; }
 
@@ -31,7 +26,7 @@ namespace WordSearchGen
         private void Init()
         {
             parameters = new WordSearchParams();
-            CurrentX = CurrentY = parameters.Offset;
+            currentX = currentY = parameters.Offset;
             SetupDictionary();
         }
 
@@ -44,12 +39,12 @@ namespace WordSearchGen
         }
 
         private void Generate_Click(object sender, EventArgs e)
-        {            
-            Boolean boardDrawnOK = false;
+        {
+            var boardDrawnOk = false;
 
-            while (!boardDrawnOK)
+            while (!boardDrawnOk)
             {
-                boardDrawnOK = DrawTheBoard();
+                boardDrawnOk = DrawTheBoard();
             }
         }
 
@@ -64,7 +59,7 @@ namespace WordSearchGen
             {
                 return false;
             }
-            return true;            
+            return true;
         }
 
         private void GenerateSquares()
@@ -79,7 +74,7 @@ namespace WordSearchGen
             {
                 var topEnd = parameters.TotalSquares;
 
-                for (int l = 0; l < topEnd; l++)
+                for (var l = 0; l < topEnd; l++)
                 {
                     var drawnLabel = DrawLabel(l);
                     if (drawnLabel.Top > MaxHeight)
@@ -96,9 +91,9 @@ namespace WordSearchGen
         private void DrawWords()
         {
             int originalTop;
-            int currentTop = originalTop = MaxHeight + (parameters.SquareSize * 2);
-            int currentLeft = parameters.Offset;
-            int labelsAdded = 0;
+            var currentTop = originalTop = MaxHeight + parameters.SquareSize * 2;
+            var currentLeft = parameters.Offset;
+            var labelsAdded = 0;
             foreach (var w in parameters.GetWords())
             {
                 var lab = new Label();
@@ -108,7 +103,7 @@ namespace WordSearchGen
                 lab.Font = new Font(lab.Font, FontStyle.Bold);
                 lab.ForeColor = Color.Blue;
                 currentTop += parameters.SquareSize;
-                this.Controls.Add(lab);
+                Controls.Add(lab);
                 labelsAdded++;
 
                 if (labelsAdded % 5 == 0)
@@ -123,25 +118,23 @@ namespace WordSearchGen
         {
             foreach (var w in parameters.GetWords())
             {
-                List<OrientationType.Orientation> choices = new List<OrientationType.Orientation>();
-                var wordSize = w.Length;
-                bool foundAny = false;
-                int index = 0;
-                OrientationType.Orientation choice;
+                var choices = new List<OrientationType.Orientation>();
+                var foundAny = false;
+                var index = 0;
 
                 while (foundAny == false)
                 {
-                    bool startPointFound = false;
-                    
+                    var startPointFound = false;
+
                     while (startPointFound == false)
-                    {         
+                    {
                         index = GetPossibleStartSquare();
-                        if (!Util.SquareIsOccupied(GetCurrentBoard(), String.Empty, index))
+                        if (!Util.SquareIsOccupied(GetCurrentBoard(), string.Empty, index))
                         {
                             startPointFound = true;
                         }
                     }
-                    
+
                     var options = PlaceFinder.GetOrientationOptions(coordinates, GetCurrentBoard(), w, parameters.GridSize, index);
                     if (options.Count == 0)
                         continue;
@@ -150,33 +143,36 @@ namespace WordSearchGen
                     choices = options.Intersect(candidates).ToList();
 
                     if (choices.Count == 0)
-                    {                     
+                    {
                         choices = new List<OrientationType.Orientation> { options[0] };
                     }
                     foundAny = choices.Any();
                 }
-                choice = choices.FirstOrDefault();
+                var choice = choices.FirstOrDefault();
                 PlaceWord(choice, index, w);
             }
         }
 
         private void PlaceWord(OrientationType.Orientation orientation, int index, string word)
         {
-            int lettersLeft = word.Length;
-            int currentLetter = 0;
-            while(lettersLeft > 0)
-            {
-                string theLetter = word.Substring(currentLetter, 1);
-                var lab = GetLabelByIndex(index);
-                if (lab.Text != String.Empty)
-                {
-                    throw new System.ArgumentException("Square was not empty!");
-                }
-                lab.Text = theLetter.ToUpper();
-                int x = Util.GetOrientationCoordinates()[orientation].X;
-                int y = Util.GetOrientationCoordinates()[orientation].Y;
+            var lettersLeft = word.Length;
+            var currentLetter = 0;
 
-                index += x + (y * parameters.GridSize);
+            while (lettersLeft > 0)
+            {
+                var theLetter = word.Substring(currentLetter, 1);
+                var lab = GetLabelByIndex(index);
+
+                if (lab.Text != string.Empty)
+                {
+                    throw new ArgumentException("Square was not empty!");
+                }
+                
+                lab.Text = theLetter.ToUpper();
+                var x = Util.GetOrientationCoordinates()[orientation].X;
+                var y = Util.GetOrientationCoordinates()[orientation].Y;
+
+                index += x + y * parameters.GridSize;
                 lettersLeft--;
                 currentLetter++;
                 Application.DoEvents();
@@ -185,7 +181,7 @@ namespace WordSearchGen
         }
 
         private List<OrientationType.Orientation> GetLeastCommonOrientation()
-        {            
+        {
             var min = orientations.Min(x => x.Value);
             var seldomUsed = orientations.Where(x => x.Value == min).Select(y => y.Key);
 
@@ -196,20 +192,20 @@ namespace WordSearchGen
         {
             var label = GetRawLabel(index);
             label.Height = label.Width = parameters.SquareSize;
-            label.Left = CurrentX;
-            label.Top = CurrentY;
-            this.Controls.Add(label);            
+            label.Left = currentX;
+            label.Top = currentY;
+            Controls.Add(label);
 
-            int addAmount = parameters.SquareSize - parameters.Padding;
+            var addAmount = parameters.SquareSize - parameters.Padding;
 
-            if (((index + parameters.Padding) % parameters.GridSize) == 0)
+            if ((index + parameters.Padding) % parameters.GridSize == 0)
             {
-                CurrentY += addAmount;
-                CurrentX = parameters.Offset;
+                currentY += addAmount;
+                currentX = parameters.Offset;
             }
             else
             {
-                CurrentX += addAmount;
+                currentX += addAmount;
             }
 
             return label;
@@ -222,40 +218,43 @@ namespace WordSearchGen
             retVal.TextAlign = ContentAlignment.MiddleCenter;
             retVal.BorderStyle = BorderStyle.FixedSingle;
             retVal.ForeColor = Color.Blue;
-            retVal.Tag = tag + parameters.Padding;            
+            retVal.Tag = tag + parameters.Padding;
             return retVal;
-            
+
         }
 
         private void Exit_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private int GetPossibleStartSquare()
         {
             var currentLetter = "#";
-            int square = 0;
-            while (currentLetter != String.Empty)
-            { 
+            var square = 0;
+
+            while (currentLetter != string.Empty)
+            {
                 var candidate = Util.GetNextStep();
                 square = candidate % parameters.TotalSquares;
                 var label = GetLabelByNumber(square + 1);
-                currentLetter = label.Text;                
+                currentLetter = label.Text;
             }
+            
             return square + 1;
         }
 
         private void ClearLabels()
         {
-            foreach (var l in this.Controls)
+            foreach (var l in Controls)
             {
                 if (l is Label)
                 {
-                    Label currentLab = l as Label;
+                    var currentLab = l as Label;
+
                     if (currentLab.Tag != null)
                     {
-                        currentLab.Text = String.Empty;
+                        currentLab.Text = string.Empty;
                     }
                 }
             }
@@ -263,11 +262,10 @@ namespace WordSearchGen
 
         private Label GetLabelByIndex(int index)
         {
-            foreach (var l in this.Controls)
+            foreach (var l in Controls)
             {
-                if (l is Label)
+                if (l is Label currentLab)
                 {
-                    Label currentLab = l as Label;
                     if (Convert.ToInt32(currentLab.Tag) == index)
                     {
                         return currentLab;
@@ -279,41 +277,41 @@ namespace WordSearchGen
 
         private List<string> GetCurrentBoard()
         {
-            List<string> retVal = new List<string>();
-            foreach (var l in this.Controls)
+            var retVal = new List<string>();
+
+            foreach (var l in Controls)
             {
-                if (l is Label)
+                if (l is Label currentLab)
                 {
-                    Label currentLab = l as Label;
                     retVal.Add(currentLab.Text);
                 }
             }
+
             return retVal;
         }
 
         private Label GetLabelByNumber(int index)
         {
-            foreach( var l in this.Controls)
+            foreach (var l in Controls)
             {
-                if (l is Label)
+                if (l is Label currentLab)
                 {
-                    Label currentLab = l as Label;
                     if (Convert.ToInt32(currentLab.Tag) == index)
                     {
                         return currentLab;
                     }
                 }
             }
+
             return null;
         }
 
         private void FillGrid_Click(object sender, EventArgs e)
         {
-            foreach (var l in this.Controls)
+            foreach (var l in Controls)
             {
-                if (l is Label)
+                if (l is Label currentLab)
                 {
-                    Label currentLab = l as Label;
                     if (currentLab.Tag != null && currentLab.Text == string.Empty)
                     {
                         currentLab.Text = Util.GetRandomLetter();

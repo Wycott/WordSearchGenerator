@@ -35,7 +35,7 @@
             // 
             // Generate
             // 
-            this.Generate.Location = new System.Drawing.Point(349, 21);
+            this.Generate.Location = new System.Drawing.Point(271, 21);
             this.Generate.Name = "Generate";
             this.Generate.Size = new System.Drawing.Size(75, 23);
             this.Generate.TabIndex = 0;
@@ -55,7 +55,7 @@
             // 
             // FillGrid
             // 
-            this.FillGrid.Location = new System.Drawing.Point(268, 21);
+            this.FillGrid.Location = new System.Drawing.Point(352, 21);
             this.FillGrid.Name = "FillGrid";
             this.FillGrid.Size = new System.Drawing.Size(75, 23);
             this.FillGrid.TabIndex = 2;

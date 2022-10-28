@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace WordSearchGen
@@ -26,7 +22,7 @@ namespace WordSearchGen
                 if (IsRoomForWord(currentBoard, word, side, startPos, coordinates[o].X, coordinates[o].Y))
                 {
                     retVal.Add(o);
-                }                
+                }
             }
 
             return retVal;
@@ -44,14 +40,14 @@ namespace WordSearchGen
         /// <returns></returns>
         private static bool IsRoomForWord(List<string> currentBoard, string word, int side, int startPos, int x, int y)
         {
-            int lettersRemaining = word.Length - 1;
-            int currentPos = startPos;
-            int currentLetter = 0;
+            var lettersRemaining = word.Length - 1;
+            var currentPos = startPos;
+            var currentLetter = 0;
             while (lettersRemaining > 0)
             {
-                string wordLetter = word.Substring(currentLetter, 1);                
+                var wordLetter = word.Substring(currentLetter, 1);
 
-                if (Util.SquareIsOccupied(currentBoard, wordLetter, currentPos))                
+                if (Util.SquareIsOccupied(currentBoard, wordLetter, currentPos))
                 {
                     return false;
                 }
@@ -90,7 +86,7 @@ namespace WordSearchGen
 
                 lettersRemaining--;
                 currentLetter++;
-                currentPos += x + (side * y);
+                currentPos += x + side * y;
             }
             return true;
         }
@@ -103,7 +99,7 @@ namespace WordSearchGen
         /// <returns></returns>
         private static bool AtLeftEdge(int side, int currentPos)
         {
-            List<int> candidates = new List<int>();
+            var candidates = new List<int>();
             for (var s = 1; s <= side * side; s++)
             {
                 if (s % side == 0)
@@ -122,7 +118,7 @@ namespace WordSearchGen
         /// <returns></returns>
         private static bool AtRightEdge(int side, int currentPos)
         {
-            List<int> candidates = new List<int>();
+            var candidates = new List<int>();
             for (var s = 1; s <= side * side; s++)
             {
                 if (s % side == 0)
@@ -152,7 +148,7 @@ namespace WordSearchGen
         /// <returns></returns>
         private static bool AtBottomEdge(int side, int currentPos)
         {
-            int topEnd = side * side;
+            var topEnd = side * side;
 
             return currentPos > topEnd - (side + 1) && currentPos <= topEnd;
         }

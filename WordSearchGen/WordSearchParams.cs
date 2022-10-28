@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WordSearchGen
 {
@@ -13,7 +10,7 @@ namespace WordSearchGen
             GridSize = 12;
             Offset = 100;
             SquareSize = 25;
-            Padding = 1;                                               
+            Padding = 1;
         }
 
         /// <summary>
@@ -54,10 +51,10 @@ namespace WordSearchGen
         ///     c) Recreating old puzzles
         /// </summary>
         /// <returns></returns>
-        internal List<String> GetWords()
+        internal List<string> GetWords()
         {
             // TODO: Add more word lists here
-            List<string> retVal = new List<string>();
+            var retVal = new List<string>();
 
             //retVal.Add("ant");
             //retVal.Add("ladybird");
@@ -94,6 +91,6 @@ namespace WordSearchGen
 
             return retVal;
 
-        }        
+        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 namespace WordSearchGen
 {
@@ -16,7 +14,7 @@ namespace WordSearchGen
         {
             var rawData = Guid.NewGuid().ToString();
 
-            return Convert.ToInt32(new String(rawData.Where(Char.IsDigit).ToArray()).Substring(0, 3));
+            return Convert.ToInt32(new string(rawData.Where(char.IsDigit).ToArray()).Substring(0, 3));
         }
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace WordSearchGen
                 return true;
             }
 
-            return currentBoard[currentPos-1] != String.Empty && currentBoard[currentPos-1] != wordLetter;
+            return currentBoard[currentPos - 1] != string.Empty && currentBoard[currentPos - 1] != wordLetter;
         }
 
         /// <summary>
@@ -42,8 +40,8 @@ namespace WordSearchGen
         /// <returns></returns>
         internal static string GetRandomLetter()
         {
-            int seed = GetNextStep();
-            int letterIndex = (seed % 26) ;
+            var seed = GetNextStep();
+            var letterIndex = seed % 26;
 
             return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Substring(letterIndex, 1);
         }

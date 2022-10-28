@@ -9,6 +9,10 @@ When the application starts, pressing `GENERATE` will have a go at filling the g
 
 When you're happy with the grid, you can press `FILL` to add letters to the remaining empty squares on the grid.
 
-You can then use the Snipping Tool or similar to grab the screen and print the puzzle out
+You can then use the Snipping Tool or similar to grab the screen and print the puzzle out.
+
+## Further Development
+
+The initial application was thrown together in a weekend to entertain my children back in 2018, but there is considerable scope for development. There are a lot of issues ranging from minor to not-so-minor that new developers or hobbyists could use to cut their teeth on.
 
 *Last updated: 28 October 2022*

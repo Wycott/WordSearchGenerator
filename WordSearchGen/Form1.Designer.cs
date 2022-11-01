@@ -45,7 +45,7 @@
             // 
             // Exit
             // 
-            this.Exit.Location = new System.Drawing.Point(433, 21);
+            this.Exit.Location = new System.Drawing.Point(433, 547);
             this.Exit.Name = "Exit";
             this.Exit.Size = new System.Drawing.Size(75, 23);
             this.Exit.TabIndex = 1;

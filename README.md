@@ -22,4 +22,6 @@ The initial application was thrown together in a weekend to entertain my childre
 
 Want to suggest a new feature, raise a bug or get involved? Click [here](https://github.com/Wycott/WordSearchGenerator/discussions).
 
+---
+
 *Last updated: 28 October 2022*

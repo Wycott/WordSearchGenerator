@@ -101,6 +101,7 @@ namespace WordSearchGen
                         break;
                 }
             }
+
             return retVal;
         }
     }

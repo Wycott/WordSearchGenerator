@@ -167,7 +167,7 @@ namespace WordSearchGen
                 {
                     throw new ArgumentException("Square was not empty!");
                 }
-                
+
                 lab.Text = theLetter.ToUpper();
                 var x = Util.GetOrientationCoordinates()[orientation].X;
                 var y = Util.GetOrientationCoordinates()[orientation].Y;
@@ -240,7 +240,7 @@ namespace WordSearchGen
                 var label = GetLabelByNumber(square + 1);
                 currentLetter = label.Text;
             }
-            
+
             return square + 1;
         }
 

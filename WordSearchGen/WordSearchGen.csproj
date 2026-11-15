@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net11.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <RootNamespace>WordSearchGen</RootNamespace>
     <AssemblyName>WordSearchGen</AssemblyName>
     <AssemblyTitle>WordSearchGen</AssemblyTitle>

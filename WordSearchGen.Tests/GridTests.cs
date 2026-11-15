@@ -99,6 +99,47 @@ public class GridTests
     }
 
     [Fact]
+    public void FillEmpty_WithDistribution_UsesIt()
+    {
+        var grid = new Grid(4);
+        TestHelpers.Write(grid, "CAT", 0, 0, Orientation.Right);
+        var onlyQ = new LetterDistribution(new Dictionary<char, double> { ['Q'] = 1 });
+
+        grid.FillEmpty(new Random(1), onlyQ);
+
+        Assert.Equal("CAT", TestHelpers.ReadWord(grid, new WordPlacement("CAT", 0, 0, Orientation.Right)));
+        Assert.Equal('Q', grid[0, 3]);
+        Assert.Equal('Q', grid[3, 3]);
+    }
+
+    [Fact]
+    public void FillEmpty_WithEnglishDistribution_HasMoreEsThanZs()
+    {
+        var grid = new Grid(60);
+
+        grid.FillEmpty(new Random(4), LetterDistribution.English);
+
+        var es = 0;
+        var zs = 0;
+        for (var r = 0; r < 60; r++)
+        {
+            for (var c = 0; c < 60; c++)
+            {
+                es += grid[r, c] == 'E' ? 1 : 0;
+                zs += grid[r, c] == 'Z' ? 1 : 0;
+            }
+        }
+
+        Assert.True(es > 20 * Math.Max(zs, 1), $"E appeared {es} times and Z {zs} times.");
+    }
+
+    [Fact]
+    public void FillEmpty_NullDistribution_Throws()
+    {
+        Assert.Throws<ArgumentNullException>(() => new Grid(3).FillEmpty(new Random(1), null!));
+    }
+
+    [Fact]
     public void FillEmpty_IsRepeatableWithTheSameSeed()
     {
         var first = new Grid(8);

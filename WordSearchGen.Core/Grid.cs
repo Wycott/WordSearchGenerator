@@ -7,8 +7,6 @@ public sealed class Grid
 {
     public const char Empty = '\0';
 
-    private const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
     private readonly char[,] cells;
 
     public Grid(int size)
@@ -38,10 +36,18 @@ public sealed class Grid
 
     /// <summary>
     /// Put a random letter in every empty cell, leaving placed words untouched.
+    /// Every letter is equally likely.
     /// </summary>
-    public void FillEmpty(Random random)
+    public void FillEmpty(Random random) => FillEmpty(random, LetterDistribution.Uniform);
+
+    /// <summary>
+    /// Put a random letter in every empty cell, leaving placed words untouched.
+    /// Letters are picked according to <paramref name="distribution"/>.
+    /// </summary>
+    public void FillEmpty(Random random, LetterDistribution distribution)
     {
         ArgumentNullException.ThrowIfNull(random);
+        ArgumentNullException.ThrowIfNull(distribution);
 
         for (var row = 0; row < Size; row++)
         {
@@ -49,7 +55,7 @@ public sealed class Grid
             {
                 if (IsEmpty(row, column))
                 {
-                    cells[row, column] = Alphabet[random.Next(Alphabet.Length)];
+                    cells[row, column] = distribution.Next(random);
                 }
             }
         }

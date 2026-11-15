@@ -100,7 +100,7 @@ namespace WordSearchGen
                 return;
             }
 
-            puzzle.Grid.FillEmpty(random);
+            puzzle.Grid.FillEmpty(random, LetterDistribution.English);
             ShowGrid();
         }
 

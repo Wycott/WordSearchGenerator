@@ -7,13 +7,23 @@ A winforms app to automate generation of word search games
 
 ## Usage
 
-Words are defined in the `WordSearchParams.cs` file. By convention there are 10 words per game but this isn't a hard and fast limit.
+Words are defined in `WordSearchGen.Core/WordLists.cs`; `WordLists.Current` picks the list the app uses. By convention there are 10 words per game but this isn't a hard and fast limit. Words must contain only letters and be no longer than the grid (12 squares).
 
 When the application starts, pressing `GENERATE` will have a go at filling the grid with the words the player needs to find. If you don't find the pattern that interesting, you can press `GENERATE` as many times as you like.
 
-When you're happy with the grid, you can press `FILL` to add letters to the remaining empty squares on the grid.
+When you're happy with the grid, you can press `FILL` to add letters to the remaining empty squares on the grid. Fill letters follow English letter frequencies (lots of E, T and A, very few Q, X and Z), so the hidden words blend in.
 
 You can then use the Snipping Tool or similar to grab the screen and print the puzzle out.
+
+If the words can't all be fitted in, the app says so instead of retrying forever.
+
+## Solution Structure
+
+| Project | Purpose |
+| --- | --- |
+| `WordSearchGen` | The WinForms app. It only draws the grid and handles the buttons. |
+| `WordSearchGen.Core` | The puzzle logic: grid, word placement, generator and word lists. It has no UI dependencies. |
+| `WordSearchGen.Tests` | xUnit tests for `WordSearchGen.Core`. Run them with `dotnet test`. |
 
 ## Further Development
 

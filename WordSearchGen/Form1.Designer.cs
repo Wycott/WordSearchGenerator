@@ -73,7 +73,7 @@
             this.Controls.Add(this.Exit);
             this.Controls.Add(this.Generate);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Word Search Generator";
             this.ResumeLayout(false);
 
         }

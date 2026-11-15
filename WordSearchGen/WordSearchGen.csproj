@@ -37,4 +37,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WordSearchGen.Core\WordSearchGen.Core.csproj" />
+  </ItemGroup>
+
 </Project>

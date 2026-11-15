@@ -1,95 +1,38 @@
-﻿using System.Collections.Generic;
-
-namespace WordSearchGen
+﻿namespace WordSearchGen
 {
-    internal class WordSearchParams
+    /// <summary>
+    /// Size and on-screen layout of the puzzle.
+    /// </summary>
+    internal sealed class WordSearchParams
     {
-        internal WordSearchParams()
-        {
-            GridSize = 12;
-            Offset = 100;
-            SquareSize = 25;
-            Padding = 1;
-        }
+        /// <summary>
+        /// Length (in letters) of each side of the grid
+        /// </summary>
+        internal int GridSize { get; } = 12;
 
         /// <summary>
-        /// Length (in letters) of the side of the grid
+        /// Offset in pixels (both x and y) from the top left of the form to the grid
         /// </summary>
-        internal int GridSize { get; set; }
+        internal int Offset { get; } = 100;
 
         /// <summary>
-        /// Offset (both x & y) from the top right of the form where the grid is formed
+        /// Width and height in pixels of each square
         /// </summary>
-        internal int Offset { get; set; }
+        internal int SquareSize { get; } = 25;
 
         /// <summary>
-        /// Square size (letter container)
+        /// Pixels by which neighbouring squares overlap, so their borders form a single line
         /// </summary>
-        internal int SquareSize { get; set; }
+        internal int CellOverlap { get; } = 1;
 
         /// <summary>
-        /// Amount of padding between each label forming the cell
+        /// Number of words shown in each column of the word list
         /// </summary>
-        internal int Padding { get; set; }
+        internal int WordsPerColumn { get; } = 5;
 
         /// <summary>
-        /// Number of squares on the board
+        /// Horizontal distance in pixels between word list columns
         /// </summary>
-        internal int TotalSquares
-        {
-            get
-            {
-                return GridSize * GridSize;
-            }
-        }
-
-        /// <summary>
-        /// Convention here is to keep old ones for
-        ///     a) Posterity
-        ///     b) Testing
-        ///     c) Recreating old puzzles
-        /// </summary>
-        /// <returns></returns>
-        internal List<string> GetWords()
-        {
-            // TODO: Add more word lists here
-            var retVal = new List<string>();
-
-            //retVal.Add("ant");
-            //retVal.Add("ladybird");
-            //retVal.Add("butterfly");
-            //retVal.Add("spider");
-            //retVal.Add("centipede");
-            //retVal.Add("caterpillar");
-            //retVal.Add("beetle");
-            //retVal.Add("cricket");
-            //retVal.Add("woodlouse");
-            //retVal.Add("wasp");
-
-            //retVal.Add("pizza");
-            //retVal.Add("chips");
-            //retVal.Add("sausage");
-            //retVal.Add("beans");
-            //retVal.Add("chocolate");
-            //retVal.Add("crisps");
-            //retVal.Add("doughnut");
-            //retVal.Add("cake");
-            //retVal.Add("milkshake");
-            //retVal.Add("haribos");
-
-            retVal.Add("superman");
-            retVal.Add("starfire");
-            retVal.Add("raven");
-            retVal.Add("penguin");
-            retVal.Add("nightwing");
-            retVal.Add("krypto");
-            retVal.Add("joker");
-            retVal.Add("cyborg");
-            retVal.Add("batman");
-            retVal.Add("beastboy");
-
-            return retVal;
-
-        }
+        internal int WordColumnWidth { get; } = 200;
     }
 }

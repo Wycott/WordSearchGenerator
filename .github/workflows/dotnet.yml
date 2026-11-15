@@ -10,7 +10,7 @@ env:
   SOLUTION_FILE: WordSearchGen.sln
 
 jobs:
-  restore:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -19,38 +19,16 @@ jobs:
           dotnet-version: '11.0.x'
       - name: Restore
         run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-  build:
-    runs-on: ubuntu-latest
-    needs: restore
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: '11.0.x'      
       - name: Build
-        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release
+        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
+      - name: Test
+        run: dotnet test WordSearchGen.Tests/WordSearchGen.Tests.csproj --configuration Release --no-build --verbosity normal
 
   semgrep:
     runs-on: ubuntu-latest
-    needs: build
+    container:
+      image: semgrep/semgrep
     steps:
       - uses: actions/checkout@v7
-
       - name: Run Semgrep
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: p/csharp            
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: '11.0.x'      
-      # IMPORTANT: Do NOT test via the .sln file.
-      # Let dotnet auto-discover test projects to avoid VSTest .sln bug.
-      - name: Test
-        run: dotnet test --configuration Release --verbosity normal
+        run: semgrep scan --config p/csharp --error

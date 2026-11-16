@@ -6,9 +6,9 @@ using WordSearchGen.Core;
 
 namespace WordSearchGen
 {
-    public partial class Form1 : Form
+    public sealed partial class Form1 : Form
     {
-        private readonly WordSearchParams parameters = new WordSearchParams();
+        private readonly WordSearchParams parameters = new();
         private readonly IReadOnlyList<string> words = WordLists.Current;
         private readonly Random random = Random.Shared;
         private readonly Font boldFont;
@@ -85,7 +85,7 @@ namespace WordSearchGen
             }
             catch (Exception ex) when (ex is WordSearchGenerationException || ex is ArgumentException)
             {
-                MessageBox.Show(this, ex.Message, "Could not generate puzzle", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, ex.Message, @"Could not generate puzzle", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

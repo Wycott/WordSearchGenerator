@@ -34,7 +34,9 @@ public sealed class WordSearchGenerator
 
     /// <summary>
     /// Build a grid containing every word. Unused cells are left empty; call
-    /// <see cref="Grid.FillEmpty"/> to fill them.
+    /// <see cref="Grid.FillEmpty(Random)"/> to fill them with uniformly random letters, or
+    /// <see cref="Grid.FillEmpty(Random, LetterDistribution)"/> to weight them, for example
+    /// with <see cref="LetterDistribution.English"/>.
     /// </summary>
     /// <exception cref="ArgumentException">A word is empty, contains non-letters, or is longer than the grid.</exception>
     /// <exception cref="WordSearchGenerationException">The words could not all be fitted in.</exception>
@@ -67,12 +69,13 @@ public sealed class WordSearchGenerator
 
         foreach (var raw in words)
         {
-            var word = raw?.Trim().ToUpperInvariant();
-
-            if (string.IsNullOrEmpty(word))
+            // Callers can still pass null despite the annotation, so check before trimming.
+            if (string.IsNullOrWhiteSpace(raw))
             {
                 throw new ArgumentException("Words must not be empty.", nameof(words));
             }
+
+            var word = raw.Trim().ToUpperInvariant();
 
             if (!word.All(c => c is >= 'A' and <= 'Z'))
             {

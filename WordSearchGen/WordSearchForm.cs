@@ -228,7 +228,12 @@ namespace WordSearchGen
 
             foreach (var clue in clues)
             {
-                var placement = puzzle.Find((string)clue.Tag);
+                if (clue.Tag is not string word)
+                {
+                    continue;
+                }
+
+                var placement = puzzle.Find(word);
 
                 if (placement == null)
                 {

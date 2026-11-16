@@ -3,5 +3,15 @@
   <Profiles>
     <Profile Name="(Default)" />
   </Profiles>
-  <Settings />
+  <Settings>
+    <Setting Name="HighlightSeconds" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="FlashMilliseconds" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">250</Value>
+    </Setting>
+    <Setting Name="SkillLevel" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Advanced</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

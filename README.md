@@ -18,9 +18,13 @@ Choose a skill level before generating:
 | Intermediate | Across or down, forwards or backwards |
 | Advanced | Any direction, including diagonals |
 
+The app remembers the level you had selected when you closed it. It is saved in your own `user.config` (under `%LocalAppData%\WordSearchGen`); the starting default for new users is the `SkillLevel` setting in `WordSearchGen/App.config`.
+
 When the application starts, pressing `GENERATE` will have a go at filling the grid with the words the player needs to find. If you don't find the pattern that interesting, you can press `GENERATE` as many times as you like.
 
 When you're happy with the grid, you can press `FILL` to add letters to the remaining empty squares on the grid. Fill letters follow English letter frequencies (lots of E, T and A, very few Q, X and Z), so the hidden words blend in.
+
+Stuck on a word? Click it in the list below the grid and it flashes red, both in the list and in the grid, for three seconds. This works both before and after `FILL`. How long it flashes for (`HighlightSeconds`) and how fast (`FlashMilliseconds`) are set in `WordSearchGen/App.config`; to change them without rebuilding, edit `WordSearchGen.dll.config` next to the exe.
 
 You can then use the Snipping Tool or similar to grab the screen and print the puzzle out.
 

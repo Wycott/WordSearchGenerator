@@ -8,7 +8,7 @@ using WordSearchGen.Core;
 
 namespace WordSearchGen
 {
-    public sealed partial class Form1 : Form
+    public sealed partial class WordSearchForm : Form
     {
         private const double DefaultHighlightSeconds = 3;
         private const double DefaultFlashMilliseconds = 250;
@@ -32,7 +32,7 @@ namespace WordSearchGen
         private bool flashOn;
         private WordSearch puzzle;
 
-        public Form1()
+        public WordSearchForm()
         {
             InitializeComponent();
 

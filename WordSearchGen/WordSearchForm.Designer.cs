@@ -1,6 +1,6 @@
 ﻿namespace WordSearchGen
 {
-    sealed partial class Form1
+    sealed partial class WordSearchForm
     {
         /// <summary>
         /// Required designer variable.
@@ -109,7 +109,7 @@
             this.Advanced.Text = "Advanced";
             this.Advanced.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // WordSearchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -121,7 +121,7 @@
             this.Controls.Add(this.FillGrid);
             this.Controls.Add(this.Exit);
             this.Controls.Add(this.Generate);
-            this.Name = "Form1";
+            this.Name = "WordSearchForm";
             this.Text = "Word Search Generator";
             this.SkillLevelGroup.ResumeLayout(false);
             this.SkillLevelGroup.PerformLayout();

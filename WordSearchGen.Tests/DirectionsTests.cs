@@ -19,8 +19,9 @@ public class DirectionsTests
         Assert.Equal(8, steps.Distinct().Count());
         Assert.All(steps, s =>
         {
-            Assert.InRange(s.RowStep, -1, 1);
-            Assert.InRange(s.ColumnStep, -1, 1);
+            var (rowStep, columnStep) = s;
+            Assert.InRange(rowStep, -1, 1);
+            Assert.InRange(columnStep, -1, 1);
             Assert.NotEqual((0, 0), s);
         });
     }

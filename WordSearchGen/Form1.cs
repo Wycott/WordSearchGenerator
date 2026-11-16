@@ -13,6 +13,7 @@ namespace WordSearchGen
         private readonly Random random = Random.Shared;
         private readonly Font boldFont;
         private readonly Label[,] squares;
+        private readonly List<Label> wordLabels = new();
         private readonly WordSearchGenerator generator;
         private WordSearch puzzle;
 
@@ -26,13 +27,83 @@ namespace WordSearchGen
 
             DrawSquares();
             DrawWords();
+            CentreLayout();
             FillGrid.Enabled = false;
         }
 
-        private void DrawSquares()
+        /// <summary>
+        /// Stack the skill level, buttons, grid and word list, centre each one horizontally
+        /// and centre the whole stack vertically on the form.
+        /// </summary>
+        private void CentreLayout()
         {
             var step = parameters.SquareSize - parameters.CellOverlap;
+            var gridExtent = (parameters.GridSize - 1) * step + parameters.SquareSize;
 
+            Button[] buttons = [Generate, FillGrid, Exit];
+            var buttonsWidth = (buttons.Length - 1) * parameters.ButtonGap;
+            var buttonsHeight = 0;
+
+            foreach (var button in buttons)
+            {
+                buttonsWidth += button.Width;
+                buttonsHeight = Math.Max(buttonsHeight, button.Height);
+            }
+
+            var wordsWidth = 0;
+            var wordsHeight = 0;
+
+            foreach (var label in wordLabels)
+            {
+                wordsWidth = Math.Max(wordsWidth, label.Left + label.Width);
+                wordsHeight = Math.Max(wordsHeight, label.Top + label.Height);
+            }
+
+            var totalHeight = SkillLevelGroup.Height
+                + parameters.ButtonGap + buttonsHeight
+                + parameters.SectionGap + gridExtent
+                + (wordLabels.Count > 0 ? parameters.SectionGap + wordsHeight : 0);
+
+            var top = Math.Max(0, (ClientSize.Height - totalHeight) / 2);
+
+            SkillLevelGroup.Location = new Point(CentredLeft(SkillLevelGroup.Width), top);
+            top += SkillLevelGroup.Height + parameters.ButtonGap;
+
+            var buttonLeft = CentredLeft(buttonsWidth);
+
+            foreach (var button in buttons)
+            {
+                button.Location = new Point(buttonLeft, top);
+                buttonLeft += button.Width + parameters.ButtonGap;
+            }
+
+            top += buttonsHeight + parameters.SectionGap;
+
+            var gridLeft = CentredLeft(gridExtent);
+
+            for (var row = 0; row < parameters.GridSize; row++)
+            {
+                for (var column = 0; column < parameters.GridSize; column++)
+                {
+                    squares[row, column].Location = new Point(gridLeft + column * step, top + row * step);
+                }
+            }
+
+            top += gridExtent + parameters.SectionGap;
+
+            // Word labels were created relative to (0, 0); shift the block as a whole.
+            var wordsLeft = CentredLeft(wordsWidth);
+
+            foreach (var label in wordLabels)
+            {
+                label.Location = new Point(wordsLeft + label.Left, top + label.Top);
+            }
+        }
+
+        private int CentredLeft(int width) => Math.Max(0, (ClientSize.Width - width) / 2);
+
+        private void DrawSquares()
+        {
             for (var row = 0; row < parameters.GridSize; row++)
             {
                 for (var column = 0; column < parameters.GridSize; column++)
@@ -44,9 +115,7 @@ namespace WordSearchGen
                         BorderStyle = BorderStyle.FixedSingle,
                         ForeColor = Color.Blue,
                         Width = parameters.SquareSize,
-                        Height = parameters.SquareSize,
-                        Left = parameters.Offset + column * step,
-                        Top = parameters.Offset + row * step
+                        Height = parameters.SquareSize
                     };
 
                     squares[row, column] = label;
@@ -55,25 +124,29 @@ namespace WordSearchGen
             }
         }
 
+        /// <summary>
+        /// Add the word list labels, positioned relative to the top left of the list.
+        /// <see cref="CentreLayout"/> moves them into place.
+        /// </summary>
         private void DrawWords()
         {
-            var step = parameters.SquareSize - parameters.CellOverlap;
-            var gridBottom = parameters.Offset + (parameters.GridSize - 1) * step;
-            var firstTop = gridBottom + parameters.SquareSize * 2;
-
             for (var i = 0; i < words.Count; i++)
             {
                 var column = i / parameters.WordsPerColumn;
                 var rowInColumn = i % parameters.WordsPerColumn;
 
-                Controls.Add(new Label
+                var label = new Label
                 {
+                    AutoSize = true,
                     Font = boldFont,
                     ForeColor = Color.Blue,
                     Text = words[i].ToUpperInvariant(),
-                    Left = parameters.Offset + column * parameters.WordColumnWidth,
-                    Top = firstTop + rowInColumn * parameters.SquareSize
-                });
+                    Left = column * parameters.WordColumnWidth,
+                    Top = rowInColumn * parameters.SquareSize
+                };
+
+                wordLabels.Add(label);
+                Controls.Add(label);
             }
         }
 
@@ -81,7 +154,7 @@ namespace WordSearchGen
         {
             try
             {
-                puzzle = generator.Generate(words);
+                puzzle = generator.Generate(words, SelectedSkillLevel());
             }
             catch (Exception ex) when (ex is WordSearchGenerationException || ex is ArgumentException)
             {
@@ -91,6 +164,16 @@ namespace WordSearchGen
 
             ShowGrid();
             FillGrid.Enabled = true;
+        }
+
+        private SkillLevel SelectedSkillLevel()
+        {
+            if (Beginner.Checked)
+            {
+                return SkillLevel.Beginner;
+            }
+
+            return Intermediate.Checked ? SkillLevel.Intermediate : SkillLevel.Advanced;
         }
 
         private void FillGrid_Click(object sender, EventArgs e)

@@ -11,9 +11,14 @@
         internal int GridSize { get; } = 12;
 
         /// <summary>
-        /// Offset in pixels (both x and y) from the top left of the form to the grid
+        /// Vertical gap in pixels between the controls, the grid and the word list
         /// </summary>
-        internal int Offset { get; } = 100;
+        internal int SectionGap { get; } = 20;
+
+        /// <summary>
+        /// Gap in pixels between neighbouring buttons, and between the skill level box and the buttons
+        /// </summary>
+        internal int ButtonGap { get; } = 6;
 
         /// <summary>
         /// Width and height in pixels of each square

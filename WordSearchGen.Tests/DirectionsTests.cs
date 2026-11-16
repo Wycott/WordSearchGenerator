@@ -45,4 +45,30 @@ public class DirectionsTests
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => Directions.StepOf((Orientation)99));
     }
+
+    [Fact]
+    public void For_Beginner_IsAcrossAndDownOnly()
+    {
+        Assert.Equal([Orientation.Down, Orientation.Right], Directions.For(SkillLevel.Beginner));
+    }
+
+    [Fact]
+    public void For_Intermediate_AddsTheReversedDirections()
+    {
+        Assert.Equal(
+            [Orientation.Down, Orientation.Right, Orientation.Up, Orientation.Left],
+            Directions.For(SkillLevel.Intermediate));
+    }
+
+    [Fact]
+    public void For_Advanced_IsEveryDirection()
+    {
+        Assert.Equal(Directions.All, Directions.For(SkillLevel.Advanced));
+    }
+
+    [Fact]
+    public void For_UnknownLevel_Throws()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => Directions.For((SkillLevel)99));
+    }
 }

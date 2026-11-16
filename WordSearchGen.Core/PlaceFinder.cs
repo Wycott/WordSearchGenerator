@@ -45,11 +45,20 @@ public static class PlaceFinder
     /// <summary>
     /// All orientations in which the word fits when it starts at the given cell.
     /// </summary>
-    public static List<Orientation> GetOrientationOptions(Grid grid, string word, int row, int column)
+    public static List<Orientation> GetOrientationOptions(Grid grid, string word, int row, int column) =>
+        GetOrientationOptions(grid, word, row, column, Directions.All);
+
+    /// <summary>
+    /// Those of the <paramref name="allowed"/> orientations in which the word fits when it
+    /// starts at the given cell.
+    /// </summary>
+    public static List<Orientation> GetOrientationOptions(
+        Grid grid, string word, int row, int column, IEnumerable<Orientation> allowed)
     {
         ArgumentNullException.ThrowIfNull(word);
+        ArgumentNullException.ThrowIfNull(allowed);
 
-        return Directions.All
+        return allowed
             .Where(o => CanPlace(grid, new WordPlacement(word, row, column, o)))
             .ToList();
     }

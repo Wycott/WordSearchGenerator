@@ -10,6 +10,14 @@ A winforms app to automate generation of word search games
 
 Words are defined in `WordSearchGen.Core/WordLists.cs`; `WordLists.Current` picks the list the app uses. By convention there are 10 words per game but this isn't a hard and fast limit. Words must contain only letters and be no longer than the grid (12 squares).
 
+Choose a skill level before generating:
+
+| Level | Words run |
+| --- | --- |
+| Beginner | Across (left to right) or down |
+| Intermediate | Across or down, forwards or backwards |
+| Advanced | Any direction, including diagonals |
+
 When the application starts, pressing `GENERATE` will have a go at filling the grid with the words the player needs to find. If you don't find the pattern that interesting, you can press `GENERATE` as many times as you like.
 
 When you're happy with the grid, you can press `FILL` to add letters to the remaining empty squares on the grid. Fill letters follow English letter frequencies (lots of E, T and A, very few Q, X and Z), so the hidden words blend in.

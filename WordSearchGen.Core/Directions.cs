@@ -10,6 +10,23 @@ public static class Directions
     /// </summary>
     public static IReadOnlyList<Orientation> All { get; } = Enum.GetValues<Orientation>();
 
+    private static readonly IReadOnlyList<Orientation> BeginnerOrientations =
+        [Orientation.Down, Orientation.Right];
+
+    private static readonly IReadOnlyList<Orientation> IntermediateOrientations =
+        [Orientation.Down, Orientation.Right, Orientation.Up, Orientation.Left];
+
+    /// <summary>
+    /// The orientations words may use at the given skill level, in declaration order.
+    /// </summary>
+    public static IReadOnlyList<Orientation> For(SkillLevel level) => level switch
+    {
+        SkillLevel.Beginner => BeginnerOrientations,
+        SkillLevel.Intermediate => IntermediateOrientations,
+        SkillLevel.Advanced => All,
+        _ => throw new ArgumentOutOfRangeException(nameof(level), level, null)
+    };
+
     /// <summary>
     /// The change in row and column for one step in the given orientation.
     /// Rows increase downwards and columns increase to the right.

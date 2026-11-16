@@ -194,4 +194,57 @@ public class WordSearchGeneratorTests
 
         Assert.Equal(8, puzzle.Placements.Select(p => p.Orientation).Distinct().Count());
     }
+
+    [Theory]
+    [InlineData(SkillLevel.Beginner)]
+    [InlineData(SkillLevel.Intermediate)]
+    [InlineData(SkillLevel.Advanced)]
+    public void Generate_OnlyUsesTheSkillLevelsDirections(SkillLevel level)
+    {
+        var allowed = Directions.For(level);
+
+        for (var seed = 1; seed <= 5; seed++)
+        {
+            var puzzle = new WordSearchGenerator(12, new Random(seed)).Generate(WordLists.Heroes, level);
+
+            Assert.All(puzzle.Placements, p => Assert.Contains(p.Orientation, allowed));
+            Assert.All(puzzle.Placements, p => Assert.Equal(p.Word, TestHelpers.ReadWord(puzzle.Grid, p)));
+        }
+    }
+
+    [Theory]
+    [InlineData(SkillLevel.Beginner, 2)]
+    [InlineData(SkillLevel.Intermediate, 4)]
+    [InlineData(SkillLevel.Advanced, 8)]
+    public void Generate_SpreadsWordsAcrossEveryAllowedDirection(SkillLevel level, int expected)
+    {
+        var words = Enumerable.Range(0, 16).Select(i => new string((char)('A' + i), 2));
+        var puzzle = new WordSearchGenerator(20, new Random(6)).Generate(words, level);
+
+        Assert.Equal(expected, puzzle.Placements.Select(p => p.Orientation).Distinct().Count());
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    public void Generate_EveryWordListFitsAtBeginnerLevel(int seed)
+    {
+        // Beginner is the most constrained level, so check the real lists still fit.
+        var generator = new WordSearchGenerator(12, new Random(seed));
+
+        foreach (var list in new[] { WordLists.Insects, WordLists.Food, WordLists.Heroes })
+        {
+            var puzzle = generator.Generate(list, SkillLevel.Beginner);
+
+            Assert.Equal(list.Count, puzzle.Placements.Count);
+        }
+    }
+
+    [Fact]
+    public void Generate_UnknownSkillLevel_Throws()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(
+            () => new WordSearchGenerator(5).Generate(["cat"], (SkillLevel)99));
+    }
 }

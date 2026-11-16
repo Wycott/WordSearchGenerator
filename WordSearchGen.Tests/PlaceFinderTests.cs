@@ -134,6 +134,17 @@ public class PlaceFinderTests
     }
 
     [Fact]
+    public void GetOrientationOptions_OnlyReturnsAllowedOrientations()
+    {
+        var grid = new Grid(9);
+
+        var options = PlaceFinder.GetOrientationOptions(
+            grid, "CAT", 4, 4, [Orientation.Left, Orientation.DownRight]);
+
+        Assert.Equal([Orientation.Left, Orientation.DownRight], options);
+    }
+
+    [Fact]
     public void GetOrientationOptions_WhenNothingFits_IsEmpty()
     {
         var grid = new Grid(3);

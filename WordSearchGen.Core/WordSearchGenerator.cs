@@ -38,10 +38,14 @@ public sealed class WordSearchGenerator
     /// <see cref="Grid.FillEmpty(Random, LetterDistribution)"/> to weight them, for example
     /// with <see cref="LetterDistribution.English"/>.
     /// </summary>
+    /// <param name="words">The words to hide.</param>
+    /// <param name="level">Decides which directions words may run in; see <see cref="Directions.For"/>.</param>
     /// <exception cref="ArgumentException">A word is empty, contains non-letters, or is longer than the grid.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="level"/> is not a defined skill level.</exception>
     /// <exception cref="WordSearchGenerationException">The words could not all be fitted in.</exception>
-    public WordSearch Generate(IEnumerable<string> words)
+    public WordSearch Generate(IEnumerable<string> words, SkillLevel level = SkillLevel.Advanced)
     {
+        var allowed = Directions.For(level);
         var normalised = NormaliseWords(words);
 
         // Longest words are the hardest to fit, so place them first.
@@ -49,7 +53,7 @@ public sealed class WordSearchGenerator
 
         for (var attempt = 0; attempt < MaxBoardAttempts; attempt++)
         {
-            var result = TryBuildBoard(placementOrder);
+            var result = TryBuildBoard(placementOrder, allowed);
 
             if (result != null)
             {
@@ -94,15 +98,15 @@ public sealed class WordSearchGenerator
         return result;
     }
 
-    private WordSearch? TryBuildBoard(IReadOnlyList<string> words)
+    private WordSearch? TryBuildBoard(IReadOnlyList<string> words, IReadOnlyList<Orientation> allowed)
     {
         var grid = new Grid(GridSize);
         var placements = new List<WordPlacement>();
-        var usage = Directions.All.ToDictionary(o => o, _ => 0);
+        var usage = allowed.ToDictionary(o => o, _ => 0);
 
         foreach (var word in words)
         {
-            var placement = TryPlaceWord(grid, word, usage);
+            var placement = TryPlaceWord(grid, word, allowed, usage);
 
             if (placement == null)
             {
@@ -117,13 +121,17 @@ public sealed class WordSearchGenerator
         return new WordSearch(grid, placements);
     }
 
-    private WordPlacement? TryPlaceWord(Grid grid, string word, IReadOnlyDictionary<Orientation, int> usage)
+    private WordPlacement? TryPlaceWord(
+        Grid grid,
+        string word,
+        IReadOnlyList<Orientation> allowed,
+        IReadOnlyDictionary<Orientation, int> usage)
     {
         for (var attempt = 0; attempt < MaxAttemptsPerWord; attempt++)
         {
             var row = random.Next(GridSize);
             var column = random.Next(GridSize);
-            var options = PlaceFinder.GetOrientationOptions(grid, word, row, column);
+            var options = PlaceFinder.GetOrientationOptions(grid, word, row, column, allowed);
 
             if (options.Count > 0)
             {

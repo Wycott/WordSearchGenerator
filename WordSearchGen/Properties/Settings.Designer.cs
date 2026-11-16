@@ -22,5 +22,35 @@ namespace WordSearchGen.Properties {
                 return defaultInstance;
             }
         }
+
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public double HighlightSeconds {
+            get {
+                return ((double)(this["HighlightSeconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("250")]
+        public int FlashMilliseconds {
+            get {
+                return ((int)(this["FlashMilliseconds"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Advanced")]
+        public string SkillLevel {
+            get {
+                return ((string)(this["SkillLevel"]));
+            }
+            set {
+                this["SkillLevel"] = value;
+            }
+        }
     }
 }
